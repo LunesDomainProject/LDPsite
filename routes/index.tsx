@@ -1,7 +1,20 @@
 import { Head } from "$fresh/runtime.ts";
 import Counter from "../islands/Counter.tsx";
+import { Handlers, PageProps } from "$fresh/server.ts";
 
-export default function Home() {
+interface EnvVars {
+  client_id: string,
+}
+
+export const handler: Handlers<EnvVars> = {
+  GET(_req, ctx) {
+    const client_id = Deno.env.get("client_id") || ""
+    return ctx.render({ client_id });
+  },
+};
+
+export default function Home({ data }: PageProps<EnvVars>) {
+  const client_id = data.client_id
   return (
     <>
       <Head>
